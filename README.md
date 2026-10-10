@@ -46,6 +46,8 @@ With the app and Ollama running, `npm run verify:ai` checks real local model cal
 
 Saved cards stay in browser storage. The interface is cached for offline reuse after its first successful load; AI still needs the local server and Ollama. Requests use the local Ollama endpoint unless you configure a remote one.
 
-Built with plain HTML, CSS, JavaScript, Node.js, SunCalc, and Ollama. See [BUILD_PLAN.md](BUILD_PLAN.md) for implementation details and [ASSET_NOTES.md](ASSET_NOTES.md) for artwork credits.
+Built with plain HTML, CSS, JavaScript, Node.js, SunCalc, and Ollama. See [BUILD_PLAN.md](docs/BUILD_PLAN.md) for implementation details and [ASSET_NOTES.md](docs/ASSET_NOTES.md) for artwork credits.
+
+The [submission draft](docs/template.txt) and [publishing plan](docs/PUBLISHING.md) are in `docs/`.
 
 [MIT License](LICENSE). SunCalc and AI model weights have their own licenses.

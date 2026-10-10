@@ -1,6 +1,6 @@
 # ShadeWindow build plan
 
-Status: local MVP implemented. See README.md for the actual stack, limitations, and commands. Real local Llama verification is recorded in evidence/local-ai.json.
+Status: local MVP implemented. See [README.md](../README.md) for the actual stack, limitations, and commands. Real local Llama verification is recorded in [evidence/local-ai.json](../evidence/local-ai.json).
 
 Delivered UI: a single-viewport desktop dashboard, a separate planning dialog, three side-by-side route cards, Shade/Routes/Weather map views, rest-stop filters, a preview timeline, score breakdown dialogs, saved cards, and a generated sun mascot. Small screens use responsive scrolling rather than squeeze controls into unreadable sizes.
 
