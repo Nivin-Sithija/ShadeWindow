@@ -5,7 +5,7 @@
 - [x] Short project README and local setup instructions.
 - [x] Generated cover in `public/assets/shadewindow-cover.png`.
 - [x] Artwork provenance in [ASSET_NOTES.md](ASSET_NOTES.md).
-- [x] Project-specific article draft in [template.txt](template.txt).
+- [x] Project-specific article draft in [template.md](template.md).
 - [x] Recorded Llama verification in `evidence/local-ai.json`.
 
 ## Before publishing

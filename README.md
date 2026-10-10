@@ -48,6 +48,6 @@ Saved cards stay in browser storage. The interface is cached for offline reuse a
 
 Built with plain HTML, CSS, JavaScript, Node.js, SunCalc, and Ollama. See [BUILD_PLAN.md](docs/BUILD_PLAN.md) for implementation details and [ASSET_NOTES.md](docs/ASSET_NOTES.md) for artwork credits.
 
-The [submission draft](docs/template.txt) and [publishing plan](docs/PUBLISHING.md) are in `docs/`.
+The [submission draft](docs/template.md) and [publishing plan](docs/PUBLISHING.md) are in `docs/`.
 
 [MIT License](LICENSE). SunCalc and AI model weights have their own licenses.
