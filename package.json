@@ -1,0 +1,9 @@
+{
+  "name": "shadewindow",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A local-AI walking planner with moving shade and simulated forecasts",
+  "scripts": { "start": "node server.mjs", "test": "node --test test/*.test.mjs", "verify:ai": "node scripts/verify-local-ai.mjs" },
+  "dependencies": { "suncalc": "1.9.0" }
+}

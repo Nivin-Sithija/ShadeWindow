@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="theme-color" content="#edf8ff">
+		<meta name="description" content="Choose a shaded walk and a good departure time with local AI.">
+		<title>ShadeWindow — find your window, head outside</title>
+		<link rel="icon" href="/icon.svg" type="image/svg+xml">
+		<script src="/theme.js"></script>
+		<link rel="stylesheet" href="/styles.css">
+		<script src="/vendor/suncalc.js" defer></script>
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body>
+		<div class="app-shell">
+			<header class="header">
+				<a class="brand" href="/"><span class="brand-mark" aria-hidden="true">☀</span><span>Shade<span class="brand-blue">Window</span><small>Find your window. Head outside.</small></span></a>
+				<nav class="steps" aria-label="How to use ShadeWindow">
+					<span><b>1</b> Tell us your walk</span>
+					<i>→</i>
+					<span><b>2</b> Compare 3 routes</span>
+					<i>→</i>
+					<span><b>3</b> Save & go</span>
+				</nav>
+				<div class="header-actions">
+					<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">☾ Dark mode</button>
+					<button id="saved-open" class="plain-button">Saved walks <span id="saved-count">0</span></button>
+					<button id="about-open" class="help-button" aria-label="How ShadeWindow works">?</button>
+				</div>
+			</header>
+			<main class="dashboard">
+				<section class="plan-strip" aria-label="Your walking preferences">
+					<div class="strip-copy">
+						<h1>Let's find your <span>next little escape.</span></h1>
+						<p id="plan-summary">Up to 20 minutes · Afternoon · More shade · A bench along the way</p>
+						<p id="interpretation" hidden></p>
+					</div>
+					<div class="strip-actions">
+						<span class="simulation-label">Demo world · synthetic weather</span>
+						<button id="edit-plan" class="primary">Edit preferences <span aria-hidden="true">↙</span></button>
+						<img class="mascot" src="/assets/sun-walker.png" alt="" onerror="this.hidden=true">
+					</div>
+				</section>
+				<div class="planning-workspace">
+					<aside id="plan-panel" class="plan-panel" aria-label="Walking preferences">
+						<div class="dialog-heading">
+							<span class="live-badge">● Live updates</span>
+						</div>
+						<h2>Make it your walk</h2>
+						<label class="input-label" for="request">Describe your ideal walk</label>
+						<textarea id="request" maxlength="1000" rows="2" placeholder="A gentle 20-minute walk, mostly shaded, with a bench halfway…">A gentle 20-minute walk, mostly shaded, with a bench halfway.</textarea>
+						<button id="ai-plan" class="primary">Let local AI plan it <span aria-hidden="true">↗</span></button>
+						<p id="ai-status" class="ai-status" aria-live="polite">Checking local AI…</p>
+						<div class="divider">
+							<span>or choose your preferences</span>
+						</div>
+						<div class="field-row">
+							<div class="field">
+								<label for="duration">Maximum walking time</label>
+								<select id="duration">
+									<option value="10">10 minutes</option>
+									<option value="15">15 minutes</option>
+									<option value="20" selected>20 minutes</option>
+									<option value="30">30 minutes</option>
+									<option value="45">45 minutes</option>
+								</select>
+							</div>
+							<div class="field">
+								<label for="window">Departure window</label>
+								<select id="window">
+									<option value="morning">Morning · 8 am–noon</option>
+									<option value="afternoon" selected>Afternoon · 2–5:30 pm</option>
+									<option value="any">Anytime · 8 am–5:30 pm</option>
+								</select>
+							</div>
+						</div>
+						<div class="field-row">
+							<div class="field">
+								<label for="date">Simulation date</label>
+								<input id="date" type="date" value="2026-10-10" min="2026-10-10" max="2026-10-16">
+							</div>
+							<div class="field">
+								<label for="scenario">Synthetic weather scenario</label>
+								<select id="scenario">
+									<option value="clear">☀ Sunny</option>
+									<option value="humid">☁ Warm & humid</option>
+									<option value="showers">☂ Showers after 4 pm</option>
+									<option value="storm">ϟ Stormy day</option>
+								</select>
+							</div>
+						</div>
+						<div class="field-row">
+							<div class="field">
+								<label for="priority">My priority</label>
+								<select id="priority">
+									<option value="shade">More shade</option>
+									<option value="short">The shortest walk</option>
+									<option value="rest">A good rest stop</option>
+								</select>
+							</div>
+							<div class="field">
+								<label for="pace">Walking pace</label>
+								<select id="pace">
+									<option value="3">Slow · 3 km/h</option>
+									<option value="3.6" selected>Gentle · 3.6 km/h</option>
+									<option value="4.5">Brisk · 4.5 km/h</option>
+								</select>
+							</div>
+						</div>
+						<div class="checkboxes">
+							<label class="check"><input id="rest" type="checkbox" checked>A bench along the way</label>
+							<label class="check"><input id="rain" type="checkbox" checked>Skip rainy windows</label>
+							<label class="check"><input id="shaded-rest" type="checkbox">The bench must be shaded</label>
+						</div>
+						<p id="error" class="error" role="alert" hidden></p>
+						<p class="live-hint" role="status">✓ Options update your walks instantly</p>
+					</aside>
+					<section class="map-card" aria-label="Explore your walking routes">
+						<div class="map-toolbar">
+							<div>
+								<h2>Willow Quarter <span class="small-tag">SIMULATED</span></h2>
+								<p id="map-instruction">Green = shade. Gold = exposed. Click a route card to compare.</p>
+							</div>
+							<div class="map-tools">
+								<div class="view-tabs" role="group" aria-label="Map view">
+									<button data-view="shade" aria-pressed="true">Shade</button>
+									<button data-view="routes" aria-pressed="false">Routes</button>
+									<button data-view="weather" aria-pressed="false">Weather</button>
+								</div>
+								<label class="map-filter"><span class="sr-only">Filter routes</span><select id="route-filter"><option value="all">All routes</option><option value="bench">With a bench</option><option value="shaded">Shaded bench</option></select></label>
+							</div>
+						</div>
+						<div class="map-stage">
+							<svg id="map" viewBox="0 0 620 440" role="img" aria-label="Simulated walking paths, building and tree shadows, and bench shade"></svg>
+							<div class="map-context">
+								<span id="map-route-name">The garden loop</span>
+								<b id="map-time">5:30 pm</b>
+								<small>Map shows this instant</small>
+							</div>
+							<span class="north" aria-hidden="true">↑<br>N</span>
+							<div id="weather" class="weather-overlay"></div>
+							<div id="map-legend" class="map-key">
+								<span><i class="shade-key"></i>Building shade</span>
+								<span><i class="sun-key"></i>Exposed</span>
+								<span><i class="unknown-key"></i>Unknown</span>
+								<span>▤ Bench</span>
+							</div>
+						</div>
+						<div class="timeline">
+							<label for="time">Explore a different time <output id="time-value" for="time">5:30 pm</output></label>
+							<span>8 am</span>
+							<input id="time" type="range" min="480" max="1050" step="15" value="1050">
+							<span>5:30 pm</span>
+							<button id="reset-time" class="plain-button">Back to walk time ↶</button>
+						</div>
+					</section>
+				</div>
+				<section class="route-section" aria-labelledby="results-heading">
+					<div class="results-heading">
+						<h2 id="results-heading">Compare your walks</h2>
+						<span id="result-source">Calculated from your controls</span>
+						<span id="empty-message" role="status" hidden></span>
+					</div>
+					<div id="recommendation" class="route-grid" aria-live="polite"></div>
+				</section>
+			</main>
+			<footer>
+				<span>Real sun position · synthetic neighbourhood & hourly weather · Colombo timezone</span>
+				<button id="method-open" class="plain-button">What do the scores mean?</button>
+				<span id="connection-status">Checking local AI…</span>
+			</footer>
+		</div>
+		<dialog id="walk-dialog">
+			<div class="dialog-heading">
+				<span class="step-label">STEP 3 · SAVE & GO</span>
+				<button data-close="walk-dialog" class="icon-button" aria-label="Close walk card">×</button>
+			</div>
+			<div id="walk-detail"></div>
+			<button id="print-card" class="primary green">Print or save as PDF <span aria-hidden="true">↗</span></button>
+		</dialog>
+		<dialog id="saved-dialog">
+			<div class="dialog-heading">
+				<span class="step-label">YOUR POCKET WALKS</span>
+				<button data-close="saved-dialog" class="icon-button" aria-label="Close saved walks">×</button>
+			</div>
+			<h2>Ready when you are.</h2>
+			<p class="dialog-intro">Saved on this browser. Open a card, put your phone away, and follow the loop.</p>
+			<div id="saved-list"></div>
+		</dialog>
+		<dialog id="about-dialog">
+			<div class="dialog-heading">
+				<span class="step-label">A LITTLE MORE CLARITY</span>
+				<button data-close="about-dialog" class="icon-button" aria-label="Close explanation">×</button>
+			</div>
+			<h2>Here's what's happening.</h2>
+			<ol class="instructions">
+				<li><strong>Plan your walk.</strong> Set your time, shade, rest-stop, and rain preferences. Local Llama can interpret a written request.</li>
+				<li><strong>Compare three routes.</strong> Each card shows its best matching departure, predicted building and tree shade, weather, and bench. Select a card to highlight it on the map.</li>
+				<li><strong>Explore, then save.</strong> The slider previews shade at an instant. Your route statistics follow the sun throughout the whole walk. Save a card to carry outside.</li>
+			</ol>
+			<h3>What is real, and what is simulated?</h3>
+			<p>Sun position is calculated from the date, time, and Colombo coordinates. Buildings, benches, routes, and forecasts are synthetic. This is a working simulation, not a real-street recommendation.</p>
+			<h3>What does the match score mean?</h3>
+			<p>Preference fit, not safety or accuracy. Route fit weights building and tree shade 60%, shorter uninterrupted exposure 25%, and rest-stop fit 15%. Rest priority uses 45/20/35. Without a requested bench, the remaining weights are rescaled. Overall match is 75% route fit and 25% weather fit.</p>
+			<p>Weather fit weights feels-like preference 50%, dryness 35%, and gust preference 15%. The default feels-like band is 22–30°C; fit falls linearly over 12°C outside it. Rain fit uses maximum hourly rain probability and amount relative to 5 mm; gust fit falls between 15 and 50 km/h. Skip-rain excludes ≥60% probability or ≥1 mm in any overlapping hour. Storm windows are excluded.</p>
+			<p>Bench fit uses shade on arrival (60 points) and closeness to halfway (40 points). Unknown geometry stays unknown; substantial gaps suppress scores. Walking time excludes pauses. Tree shade uses synthetic opaque circular canopies at known heights. Real foliage can let light through. Terrain, accessibility, bench occupancy, and UV protection aren't modelled.</p>
+			<p class="dialog-footnote">No external maps, telemetry, or remote inference in the default local setup. Solar calculations use <a href="https://github.com/mourner/suncalc">SunCalc</a>.</p>
+		</dialog>
+		<script type="module">if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});</script>
+	</body>
+</html>

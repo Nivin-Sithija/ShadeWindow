@@ -1,0 +1,64 @@
+{
+  "model": "llama3.1:8b",
+  "checkedAt": "2026-10-10T18:23:26.448Z",
+  "synthetic": true,
+  "cases": [
+    {
+      "name": "shade and bench",
+      "request": "A gentle 20-minute walk, mostly shaded, with a bench halfway. Avoid rain.",
+      "status": 200,
+      "response": {
+        "prefs": {
+          "duration": 20,
+          "window": "afternoon",
+          "priority": "shade",
+          "rest": true,
+          "shadedRest": false,
+          "avoidRain": true,
+          "pace": 3.6
+        },
+        "selectedId": "garden-1050",
+        "reasons": [
+          "shade",
+          "short"
+        ],
+        "model": "llama3.1:8b",
+        "latency": 11093
+      },
+      "passed": true
+    },
+    {
+      "name": "short morning walk",
+      "request": "I only have 10 minutes in the morning. Choose the shortest walk. No bench needed. Avoid rain.",
+      "status": 200,
+      "response": {
+        "prefs": {
+          "duration": 10,
+          "window": "morning",
+          "priority": "short",
+          "rest": false,
+          "shadedRest": false,
+          "avoidRain": true,
+          "pace": 3.6
+        },
+        "selectedId": "short-480",
+        "reasons": [
+          "shade",
+          "weather"
+        ],
+        "model": "llama3.1:8b",
+        "latency": 7877
+      },
+      "passed": true
+    },
+    {
+      "name": "unsupported accessibility",
+      "request": "I need a wheelchair-accessible route with guaranteed step-free pavements.",
+      "status": 422,
+      "response": {
+        "error": "This demo cannot support: wheelchair-accessible route with guaranteed step-free pavements. Try duration, shade, benches, or rain preferences."
+      },
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs and test output
+*.log
+coverage/
+.nyc_output/
+
+# Build output and caches
+dist/
+build/
+.cache/
+tmp/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
